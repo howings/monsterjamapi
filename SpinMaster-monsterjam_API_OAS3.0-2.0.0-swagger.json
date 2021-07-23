@@ -1,0 +1,246 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "2.0.0",
+    "title" : "Monster Jam API",
+    "description" : "An API that allows users to obtain/retrieve information about all discontinued, existing, physical, and virtual toy monster trucks from Spin Master in company DB.",
+    "termsOfService" : "https://spinmaster.com/term-of-use",
+    "contact" : {
+      "name" : "Fiona",
+      "url" : "spinmaster.com",
+      "email" : "fiona@spinmaster.com"
+    },
+    "license" : {
+      "name" : "Spin Master License",
+      "url" : "http://license.foo.com"
+    }
+  },
+  "servers" : [ {
+    "url" : "https://dev.spinmaster.com/v1",
+    "description" : "Dev server"
+  }, {
+    "url" : "https://dev.foo.com/v1",
+    "description" : "Prod Server"
+  } ],
+  "paths" : {
+    "/trucks" : {
+      "get" : {
+        "description" : "Obtain information about all discontinued, existing, physical, and virtual toy monster trucks from Spin Master in company DB",
+        "parameters" : [ {
+          "name" : "bodyLimit",
+          "in" : "query",
+          "description" : "The amount of trucks returned per query",
+          "schema" : {
+            "type" : "integer",
+            "minimum" : 10,
+            "maximum" : 20,
+            "example" : 15
+          }
+        }, {
+          "name" : "pageLimit",
+          "in" : "query",
+          "description" : "The pages to return truck info",
+          "schema" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 5,
+            "example" : 2
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful pull of truck info",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Trucks"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Trucks"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Trucks not found"
+          }
+        }
+      },
+      "post" : {
+        "description" : "Insert information for a single toy monster trucks from Spin Master in company DB",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Truck"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Truck"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successfully inserted a new truck"
+          },
+          "400" : {
+            "description" : "Invalid inputs"
+          }
+        }
+      }
+    },
+    "/trucks/{id}" : {
+      "get" : {
+        "description" : "Obtain information of a single truck from Spin Master in company DB",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "description" : "The ID of the toy truck",
+          "schema" : {
+            "type" : "integer",
+            "example" : 4
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully loaded truck info based on ID",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Truck"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Truck"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Truck not found"
+          }
+        }
+      },
+      "put" : {
+        "description" : "Update a single truck info with id",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "description" : "Truck id to update",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "example" : 4
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully update truck and return update truck info",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Truck"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Truck"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Truck not found"
+          }
+        }
+      },
+      "delete" : {
+        "description" : "Delete a single truck by id",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "description" : "Truck id to delete",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "example" : 4
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully delete truck and return delete truck info",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Truck"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Truck"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Truck not found"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Trucks" : {
+        "description" : "Array of truck info",
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Truck"
+        }
+      },
+      "Truck" : {
+        "description" : "Model containing truck info",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "example" : 4
+          },
+          "truck name" : {
+            "type" : "string",
+            "example" : "Grave Digger"
+          },
+          "truck type" : {
+            "type" : "string",
+            "example" : "virtual"
+          },
+          "year made" : {
+            "type" : "number",
+            "example" : 1998
+          },
+          "discontinued" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "image file name" : {
+            "type" : "string",
+            "example" : "gd_1998.png"
+          }
+        }
+      }
+    }
+  }
+}
